@@ -7,7 +7,7 @@ Target: Ubuntu 26.04 desktop (native, Wayland). Also works on WSL.
 
 ```bash
 sudo apt-get install -y git
-git clone https://github.com/Benluv/dotfiles.git ~/dotfiles
+git clone https://github.com/bluongov/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./bootstrap.sh            # add --work for the etraid linter/formatter
 ```
