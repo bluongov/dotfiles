@@ -11,11 +11,15 @@ return {
         workspaceWord = true,    -- Keep word-based completions from workspace
         callSnippet = 'Disable', -- Don't expand function call snippets
       },
+      diagnostics = {
+        globals = { 'vim' },
+      },
       runtime = {
         version = 'LuaJIT', -- Neovim uses LuaJIT
       },
       workspace = {
         checkThirdParty = false, -- Suppress "Do you need to configure your work environment?" popup
+        library = vim.api.nvim_get_runtime_file('', true),
       },
     },
   },

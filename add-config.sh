@@ -11,7 +11,7 @@
 #   2. Creates the mirrored directory structure inside ~/dotfiles/<module>/
 #   3. Moves the file into the repo (preserving its content)
 #   4. Runs stow to create the symlink back to the original location
-#   5. Registers the module in install.sh if it isn't already there
+#   5. Registers the module in install.sh (ALL_MODULES) if it isn't already there
 #
 # After running this, edit the file at its original path as normal.
 # Changes land in the repo automatically via the symlink.
@@ -139,28 +139,7 @@ else
     info "  Added '$MODULE' to ALL_MODULES"
 fi
 
-# 2. Add mkdir -p for the parent dir if it's under .config/ and not already present
-if [[ "$REL_PATH" == .config/* ]]; then
-    LIVE_PARENT_REL=".config/$(echo "$REL_PATH" | cut -d'/' -f2)"
-    MKDIR_LINE="mkdir -p ~/$LIVE_PARENT_REL"
-    if grep -qF "$MKDIR_LINE" "$DOTFILES_DIR/install.sh"; then
-        info "  mkdir entry already present"
-    else
-        # Insert after the last existing mkdir -p line
-        sed -i "/^mkdir -p ~\/.config\//a $MKDIR_LINE" "$DOTFILES_DIR/install.sh" 
-        info "  Added: $MKDIR_LINE"
-    fi
-fi
-
-# 3. Add to MANAGED_FILES list if not already present
-MANAGED_ENTRY="    ~/$(echo "$REL_PATH" | sed 's|^\.config/|.config/|')"
-if grep -qF "~/$REL_PATH" "$DOTFILES_DIR/install.sh"; then
-    info "  MANAGED_FILES entry already present"
-else
-    # Insert before the closing parenthesis of MANAGED_FILES
-    sed -i "/^)/{ /MANAGED_FILES/!{ 0,/)/{s|^)|    ~/$REL_PATH\n)|} } }" "$DOTFILES_DIR/install.sh"
-    info "  Added '~/$REL_PATH' to MANAGED_FILES"
-fi
+# install.sh finds files, creates parent dirs and backs up conflicts by itself.
 
 # ── Done ─────────────────────────────────────────────────────────────────
 echo ""

@@ -1,0 +1,4 @@
+\.git
+^/README.*
+^/restore-on-start\.sh
+^/test-workspaces\.py

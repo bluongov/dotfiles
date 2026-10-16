@@ -1,0 +1,19 @@
+{
+  "default_pack": "mj-grunts",
+  "volume": 0.5,
+  "enabled": true,
+  "desktop_notifications": true,
+  "categories": {
+    "session.start": false,
+    "task.acknowledge": false,
+    "task.complete": true,
+    "task.error": false,
+    "input.required": false,
+    "resource.limit": false,
+    "user.spam": false
+  },
+  "annoyed_threshold": 3,
+  "annoyed_window_seconds": 10,
+  "silent_window_seconds": 0,
+  "relay_mode": "local"
+}

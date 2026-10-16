@@ -1,0 +1,65 @@
+{
+  "lastChangelogVersion": "1.3.0",
+  "theme": "dark",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-sonnet-5.5",
+  "modelThinkingLevels": {
+    "github-copilot/gpt-6-luna": "max",
+    "github-copilot/gpt-6.1-sol": "high",
+    "github-copilot/claude-sonnet-5.5": "high"
+  },
+  "enabledModels": [
+    "github-copilot/gpt-6.1-sol",
+    "github-copilot/gpt-6-luna",
+    "github-copilot/gemini-3.8-flash",
+    "github-copilot/gpt-6-astra",
+    "github-copilot/claude-opus-5.5",
+    "github-copilot/claude-sonnet-5.5"
+  ],
+  "packages": [
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@narumitw/pi-usage",
+    "npm:pi-web-access",
+    "git:github.com/ayghri/i-have-adhd",
+    "~/.local/share/pi-peon-ping",
+    {
+      "source": "npm:pi-subagents@0.76.1",
+      "extensions": []
+    }
+  ],
+  "hideThinkingBlock": false,
+  "subagents": {
+    "defaultModel": "github-copilot/gpt-6-luna",
+    "defaultThinking": "high",
+    "agentOverrides": {
+      "worker-xhigh": {
+        "thinking": "xhigh"
+      },
+      "expert": {
+        "model": "github-copilot/gpt-6.1-sol",
+        "thinking": "high"
+      },
+      "oracle": {
+        "model": "github-copilot/gpt-6.1-sol",
+        "thinking": "high"
+      }
+    },
+    "watchdog": {
+      "enabled": false,
+      "main": {
+        "model": "github-copilot/gpt-6-luna",
+        "thinking": "high"
+      },
+      "children": {
+        "enabled": false
+      },
+      "clarification": true,
+      "cadence": {
+        "everyNTools": 20
+      },
+      "agentEndTimeoutMs": 120000,
+      "stalemateRepeats": 3,
+      "maxWarnings": 3
+    }
+  }
+}

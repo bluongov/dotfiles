@@ -1,0 +1,25 @@
+{
+  "name": "etraid-eslint-prettier-config",
+  "version": "1.0.0",
+  "description": "eslint and prettier configuration to etraid dev team",
+  "keywords": [
+    "eslint"
+  ],
+  "author": "etraid team",
+  "engines": {
+    "node": ">=22 <=24",
+    "npm": ">=10 <= 11"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@stylistic/eslint-plugin": "^5.7.1",
+    "eslint": "^9.39.2",
+    "eslint-import-resolver-meteor": "^0.4.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsdoc": "^61.7.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.5.0",
+    "prettier": "3.7.4"
+  }
+}

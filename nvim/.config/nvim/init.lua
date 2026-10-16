@@ -28,3 +28,6 @@ require('lazy').setup({
     { import = 'themes' },
   },
 })
+
+-- AI provider toggle (<leader>ai) — loaded after plugins so both providers exist
+require('config.ai-toggle')

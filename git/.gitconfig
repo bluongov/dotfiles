@@ -5,10 +5,39 @@
 	name = benluv
 [core]
 	pager = delta
+  editor = nvim
+[merge]
+  tool = meld
+[mergetool "meld"]
+  cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output="$MERGED"
+  trustExitCode = false
+[mergetool]
+  keepBackup = false
+[diff]
+  tool = meld
+[difftool "meld"]
+  cmd = meld "$LOCAL" "$REMOTE"
+  trustExitCode = true
 [interactive]
 	diffFilter = delta --color-only
 [delta]
 	navigate = true    # use n and N to move between diff sections
 	light = false
 [merge]
-	conflictStyle = zdiff3
+  conflictStyle = zdiff3
+[color]
+  ui = true
+[credential "https://etraid.ghe.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.etraid.ghe.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential]
+	helper = store
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
