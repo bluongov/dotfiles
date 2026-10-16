@@ -1,0 +1,57 @@
+add_newline = false
+format = "$directory$git_branch$git_status$kubernetes$aws$azure$gcloud$terraform$direnv$python$nodejs$golang$cmd_duration$status$jobs$character"
+
+[directory]
+truncation_length = 0
+truncate_to_repo = false
+home_symbol = "/home/bluongo"
+style = "bold cyan"
+
+[git_branch]
+format = "[$branch]($style) "
+
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+
+[kubernetes]
+disabled = true
+format = "[$context(:$namespace)]($style) "
+
+[aws]
+format = "[$profile]($style) "
+
+[azure]
+format = "[$subscription]($style) "
+
+[gcloud]
+format = "[$account]($style) "
+
+[terraform]
+format = "[$workspace]($style) "
+
+[direnv]
+format = "[$loaded]($style) "
+
+[python]
+format = "[$version( $virtualenv)]($style) "
+
+[nodejs]
+format = "[$version]($style) "
+
+[golang]
+format = "[$version]($style) "
+
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration]($style) "
+
+[status]
+disabled = false
+format = "[$symbol$status]($style) "
+
+[jobs]
+format = "[$symbol$number]($style) "
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"

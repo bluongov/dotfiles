@@ -27,3 +27,17 @@
   conflictStyle = zdiff3
 [color]
   ui = true
+[credential "https://etraid.ghe.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.etraid.ghe.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential]
+	helper = store
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

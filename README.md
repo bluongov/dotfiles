@@ -1,125 +1,95 @@
 # dotfiles
 
-Personal configuration files managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Personal configuration managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Target: Ubuntu 26.04 desktop (native, Wayland). Also works on WSL.
 
-## Quick Start (fresh machine)
+## Fresh machine
 
 ```bash
-git clone git@github.com:benluv/dotfiles.git ~/dotfiles
+sudo apt-get install -y git
+git clone https://github.com/Benluv/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-./bootstrap.sh   # Installs all tools + symlinks configs
+./bootstrap.sh            # add --work for the etraid linter/formatter
 ```
 
-If tools are already installed and you just want to symlink configs:
+Expect 10 to 20 minutes, mostly downloads. Every step is idempotent: re-run
+`./bootstrap.sh` to retry anything listed as failed at the end.
 
-```bash
-./install.sh
-```
+Then, in order:
 
-## Structure
+1. Log out and back in (zsh login shell + docker group).
+2. Terminal profile font: **JetBrainsMono Nerd Font**.
+3. Copy private files from the old machine (never committed):
+   - `~/.ssh/id_ed25519_*` keys (`chmod 600`)
+   - `~/.ssh/config.d/private` (servers and LAN hosts)
+   - `~/.config/secrets/*.zsh` (API keys, sourced by `.zshrc`)
+4. `gh auth login`, then `./bootstrap.sh` again: clones the private Open Design deploy repo.
+5. `pi`, then `/login` (GitHub Copilot).
+6. `tmux`, then `prefix + I` if plugins are missing.
 
-Each top-level directory is a **stow module** — its contents mirror `$HOME`.
+## Modules
 
-```
-dotfiles/
-├── zsh/           # .zshrc, .p10k.zsh (Powerlevel10k theme)
-├── tmux/          # .tmux.conf, .config/tmux/battery.sh
-├── git/           # .gitconfig, .ssh/config
-├── opencode/      # .config/opencode/package.json
-├── k9s/           # .config/k9s/ (Kubernetes TUI)
-├── htop/          # .config/htop/htoprc
-├── install.sh     # Symlinks dotfiles via stow
-├── bootstrap.sh   # Installs tools on fresh Ubuntu/Debian
-└── .gitignore
-```
+Each top-level directory is a stow module; its contents mirror `$HOME`.
 
-## Install individual modules
-
-```bash
-cd ~/dotfiles
-stow zsh          # Only symlink zsh configs
-stow tmux git     # Symlink tmux + git configs
-```
-
-## Remove symlinks
-
-```bash
-cd ~/dotfiles
-stow -D zsh       # Remove zsh symlinks
-```
-
-## Adding new configs
-
-Use the `add-config.sh` helper — it handles everything automatically:
-
-```bash
-~/dotfiles/add-config.sh ~/.config/newapp/config.yaml
-```
-
-Or use the shell function (available after sourcing `.zshrc`):
-
-```bash
-add-config ~/.config/newapp/config.yaml
-```
-
-It will:
-1. Create the module directory structure inside `~/dotfiles/`
-2. Move the file into the repo
-3. Run stow to create the symlink back to the original location
-4. Register the module in `install.sh`
-
-After that, edit the file at its original path as normal — changes go directly into the repo via the symlink.
-
-For files directly in `$HOME` (like `.zshrc`, `.tmux.conf`) it will prompt you for a module name.
-
-## Updating configs
-
-Because stow creates **symlinks**, your live configs point directly into this repo.
-Any changes you make to `~/.config/k9s/config.yaml` (for example) are already
-in `~/dotfiles/k9s/.config/k9s/config.yaml`. Just commit when ready:
-
-```bash
-dotfiles-sync
-```
-
-The `dotfiles-sync` shell function (defined in `.zshrc`) stages all changes,
-shows you a diff summary, and prompts for a commit message. To push:
-
-```bash
-cd ~/dotfiles && git push
-```
-
-On another machine, pull the changes:
-
-```bash
-cd ~/dotfiles && git pull
-```
-
-No re-stow needed — the symlinks already point to the right files.
-
-## What's NOT tracked (and why)
-
-| File | Reason |
-|---|---|
-| `.npmrc` | Contains auth tokens (secret) |
-| `.git-credentials` | Contains GitHub tokens (secret) |
-| SSH private keys | Never put private keys in a repo |
-| `.zsh_history` | Machine-specific |
-| Oh My Zsh, NVM, TPM plugins | Installed by `bootstrap.sh` |
-| `/usr/local/bin/*` binaries | Installed by `bootstrap.sh` |
-
-## Tools included
-
-| Tool | Purpose | Config tracked? |
+| Module | Links | Notes |
 |---|---|---|
-| zsh + Oh My Zsh | Shell | Yes (.zshrc, .p10k.zsh) |
-| tmux + TPM | Terminal multiplexer | Yes (.tmux.conf) |
-| eza | Modern `ls` | Via .zshrc aliases |
-| bat | Modern `cat` | Via .zshrc alias |
-| fd | Modern `find` | Via .zshrc fzf config |
-| fzf | Fuzzy finder | Via .zshrc env vars |
-| ripgrep | Modern `grep` | Via .zshrc `fr()` function |
-| tldr | Simplified man pages | Installed by bootstrap |
-| Neovim | Editor | Config dir exists but empty |
-| k9s | Kubernetes TUI | Yes (.config/k9s/) |
-| OpenCode | AI coding assistant | Yes (plugin config) |
+| `zsh` | `.zshrc`, `.config/starship.toml`, `.config/zsh/plugins/` | Plain zsh + starship, vendored zsh-autosuggestions |
+| `tmux` | `.tmux.conf`, `.config/tmux/battery.sh` | Workspace restore helper stays in the repo, see `tmux/README.md` |
+| `git` | `.gitconfig`, `.ssh/config` | `.ssh/config` includes untracked `~/.ssh/config.d/*` |
+| `nvim` | `.config/nvim/` | Whole directory linked |
+| `pi` | `.pi/agent/{settings.json,AGENTS.md,WATCHDOG.md,keybindings.json,i-have-adhd.json,mcp.json}`, `agents/`, `prompts/`, `extensions/` | Pi coding agent config. Never tracked: `auth.json`, `sessions/`, `trust.json`, `npm/`, `git/` |
+| `peon-ping` | `.local/share/pi-peon-ping/`, `.config/peon-ping/config.json` | Locally patched Pi extension (see its `LOCAL-SETUP.md`). Sound packs download at bootstrap |
+| `k9s`, `htop`, `lazygit`, `tealdeer` | `.config/<app>/` | |
+| `nextjs-nodejs`, `turborepo` | `.config/<app>/` | Telemetry opt-outs |
+| `etraid_linter_formatter` | `.config/etraid_linter_formatter/` | Opt-in: `./install.sh etraid_linter_formatter` or `bootstrap.sh --work` |
+
+Pi packages listed in `settings.json` (`pi-subagents`, `pi-web-access`,
+`rpiv-ask-user-question`, `pi-usage`, `i-have-adhd`, peon-ping) are installed
+by `pi update --extensions`, which bootstrap runs after linking.
+
+## What bootstrap installs
+
+| Group | Tools |
+|---|---|
+| Shell | zsh, starship, fzf, zoxide |
+| Terminal | tmux + TPM, JetBrainsMono Nerd Font, wl-clipboard, xclip |
+| CLI | eza, bat, fd, ripgrep, tldr, delta, lazygit, jq, htop |
+| Editor | Neovim (latest release, `~/.local/opt/nvim`) |
+| Runtimes | nvm + Node LTS, pnpm, Bun, pyenv, Go (`/usr/local/go`), Rust (rustup) |
+| Containers | docker (Ubuntu packages), kubectl, minikube, k9s |
+| AI | pi, codebase-memory-mcp, rtk, headroom (pipx), agentmemory, agent-browser, gh |
+| Language servers | bash-language-server, yaml-language-server |
+
+User binaries go to `~/.local/bin`, fetched from the latest GitHub releases
+with an apt fallback where Ubuntu ships the tool.
+
+## Open Design
+
+- Deploy scripts: private repo `bluongov/opendesign-deploy`, cloned to
+  `~/wsl_code/etra/opendesign/deploy`.
+- Data (about 5 GB, includes SQLite): not in git. Stop the container first, then copy:
+
+```bash
+# old machine
+tar -C ~/wsl_code/etra/opendesign -czf opendesign-data.tgz data
+# new machine (after copying the file over)
+mkdir -p ~/wsl_code/etra/opendesign && tar -C ~/wsl_code/etra/opendesign -xzf opendesign-data.tgz
+```
+
+## Everyday use
+
+```bash
+cd ~/dotfiles
+./install.sh               # (re)link default modules; backs up conflicting files
+./install.sh zsh tmux      # specific modules
+stow -D zsh                # unlink a module
+add-config ~/.config/app/config.yaml   # move a new file into the repo and link it
+dotfiles-sync              # stage, show status, optional commit
+```
+
+Configs are symlinks, so editing `~/.zshrc` edits the repo. Commit and push when ready.
+
+## Never commit
+
+The repo is public. Keep these out: SSH keys, `~/.ssh/config.d/*`,
+`~/.config/secrets/*`, `~/.pi/agent/auth.json`, `~/.git-credentials`.

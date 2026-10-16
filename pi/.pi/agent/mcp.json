@@ -1,0 +1,33 @@
+{
+  "mcpServers": {
+    "codebase-memory": {
+      "command": "/home/bluongo/.local/bin/codebase-memory-mcp",
+      "args": [],
+      "env": {
+        "CBM_ALLOWED_ROOT": "/home/bluongo/wsl_code/etra/swarmer/repos"
+      },
+      "timeout": 300,
+      "exposure": "codemode"
+    },
+    "codebase-memory-personal": {
+      "command": "/home/bluongo/.local/bin/codebase-memory-mcp",
+      "args": [],
+      "env": {
+        "CBM_ALLOWED_ROOT": "/home/bluongo/wsl_code/personal"
+      },
+      "timeout": 300,
+      "exposure": "codemode",
+      "description": "Code graph of personal projects under ~/wsl_code/personal (drone-swarm, fatcoin, ...): search/trace code without reading whole files"
+    },
+    "codebase-memory-bluongo-site": {
+      "command": "/home/bluongo/.local/bin/codebase-memory-mcp",
+      "args": [],
+      "env": {
+        "CBM_ALLOWED_ROOT": "/home/bluongo/wsl_code/etra/opendesign/data/projects-by-title/bluongo--5303b0c8"
+      },
+      "timeout": 300,
+      "exposure": "codemode",
+      "description": "Code graph of the bluongo.com portfolio site (static pages + WIP Flask insights app)"
+    }
+  }
+}
